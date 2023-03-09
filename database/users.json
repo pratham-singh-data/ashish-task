@@ -1,7 +1,1 @@
-{
-  "test@gmail.com": {
-    "username": "ABC",
-    "password": "5616e00ec7cd83e0d477ffd3e640627d8ed97918bc373a83a7f9345a21a7aa72a75b2da260ee0733fccfa739c731ca429e37914db80c12c6907e69919ae54ff2",
-    "email": "test@gmail.com"
-  }
-}
+{"test@gmail.com":{"username":"ABC","password":"5616e00ec7cd83e0d477ffd3e640627d8ed97918bc373a83a7f9345a21a7aa72a75b2da260ee0733fccfa739c731ca429e37914db80c12c6907e69919ae54ff2","email":"test@gmail.com"},"test1@gmail.com":{"username":"DEF","password":"5616e00ec7cd83e0d477ffd3e640627d8ed97918bc373a83a7f9345a21a7aa72a75b2da260ee0733fccfa739c731ca429e37914db80c12c6907e69919ae54ff2","email":"test1@gmail.com","posts":{}}}

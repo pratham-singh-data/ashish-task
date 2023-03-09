@@ -8,8 +8,6 @@ const { EmailInUse,
     UserSuccessfullyRegisterred,
     CredentialDoNotMatch,
     SuccessfulLogin,
-    InvalidToken,
-    NonExistentUser,
     SuccessfulLogout, } = require('../util/messages');
 const { sendResponse, } = require('../util/sendResponse');
 const { userRegistrationSchema, } =
@@ -124,36 +122,7 @@ function loginUser(req, res) {
  * @param {Response} res express response object.
  */
 function logoutUser(req, res) {
-    let userId;
-
-    try {
-        ({ id: userId, } = jwt.verify(req.headers.token, SECRETKEY));
-    } catch (err) {
-        sendResponse(res, {
-            statusCode: 400,
-            message: InvalidToken,
-        });
-        return;
-    }
-
     const tokenFileData = readTokensData();
-    const userFileData = readUsersData();
-
-    if (! tokenFileData[req.headers.token]) {
-        sendResponse(res, {
-            statusCode: 400,
-            message: InvalidToken,
-        });
-        return;
-    }
-
-    if (! userFileData[userId]) {
-        sendResponse(res, {
-            statusCode: 403,
-            message: NonExistentUser,
-        });
-        return;
-    }
 
     delete tokenFileData[req.headers.token];
 
