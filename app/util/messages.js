@@ -11,4 +11,5 @@ module.exports = {
     PostSuccessfullyAdded: `Post successfully Added`,
     LikeRegisterred: `Like Registerred.`,
     CommentAdded: `Comment successfully added.`,
+    NonExistentEndpoint: `This endpont does not exist.`,
 };
