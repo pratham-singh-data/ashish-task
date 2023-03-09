@@ -2,7 +2,10 @@ const { readUsersData,
     readPostsData,
     writePostsData,
     writeUsersData, } = require('../helper/fileManipulators');
-const { InvalidToken, PostSuccessfullyAdded, } = require('../util/messages');
+const { InvalidToken,
+    PostSuccessfullyAdded,
+    NonExistentPost,
+    LikeRegisterred, } = require('../util/messages');
 const { sendResponse, } = require('../util/sendResponse');
 const { createPostSchema, } = require('../validator/createPostSchema');
 const jwt = require(`jsonwebtoken`);
@@ -58,6 +61,7 @@ function createPost(req, res) {
     sendResponse(res, {
         statusCode: 400,
         message: PostSuccessfullyAdded,
+        postId,
     });
 }
 
@@ -67,10 +71,52 @@ function createPost(req, res) {
  * @param {Response} res express response object.
  */
 function likePost(req, res) {
+    let userId;
+
+    try {
+        ({ id: userId, } = jwt.verify(req.headers.token, SECRETKEY));
+    } catch (err) {
+        console.log(err.message);
+        sendResponse(res, {
+            statusCode: 400,
+            message: InvalidToken,
+        });
+        return;
+    }
+    const postFileData = readPostsData();
+
+    const { id: postId, type, } = req.params;
+
+    if (! postFileData[postId]) {
+        sendResponse(res, {
+            statusCode: 403,
+            message: NonExistentPost,
+        });
+        return;
+    }
+
+    const postData = postFileData[postId];
+    postData.likes[userId] = type;
+
+    writePostsData(postFileData);
+
+    sendResponse(res, {
+        statusCode: 200,
+        message: LikeRegisterred,
+    });
+}
+
+/**
+ * Middleware to comment on a post
+ * @param {Request} req express request object.
+ * @param {Response} res express response object.
+ */
+function commentPost(req, res) {
 
 }
 
 module.exports = {
     createPost,
     likePost,
+    commentPost,
 };

@@ -5,7 +5,9 @@ module.exports = {
     SuccessfulLogin: `Successful Login.`,
     InvalidToken: `Invalid token in header.`,
     NonExistentUser: `This user does not exist.`,
+    NonExistentPost: `This post does not exist.`,
     SuccessfulLogout: `Successfully logged out`,
     TokenIsNedded: `Token is needed in headers.`,
     PostSuccessfullyAdded: `Post successfully Added`,
+    LikeRegisterred: `Like Registerred.`,
 };
