@@ -1,7 +1,9 @@
 const { SECRETKEY, } = require('../../config');
 const { sendResponse, } = require('../util/sendResponse');
 const jwt = require(`jsonwebtoken`);
-const { InvalidToken, NonExistentUser, } = require('../util/messages');
+const { InvalidToken,
+    NonExistentUser,
+    TokenIsNedded, } = require('../util/messages');
 const { readTokensData,
     readUsersData, } = require('../helper/fileManipulators');
 
@@ -15,7 +17,7 @@ function checkToken(req, res, next) {
     if (! req.headers.token) {
         sendResponse(res, {
             statusCode: 400,
-            message: `Token is needed`,
+            message: TokenIsNedded,
         });
         return;
     }
