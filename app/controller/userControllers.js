@@ -2,7 +2,7 @@ const Joi = require('joi');
 const { readUsersData,
     writeUsersData,
     readTokensData,
-    writeTokensData, } = require('../helper/fileManipulators');
+    writeTokensData, } = require('../helper');
 const { hashPassword, } = require('../util/hashPassword');
 const { EmailInUse,
     UserSuccessfullyRegisterred,
@@ -10,11 +10,10 @@ const { EmailInUse,
     SuccessfulLogin,
     SuccessfulLogout, } = require('../util/messages');
 const { sendResponse, } = require('../util/sendResponse');
-const { userRegistrationSchema, } =
-    require('../validator/userRegistrationSchema');
 const jwt = require(`jsonwebtoken`);
 const { SECRETKEY, TOKENEXPIRATIONTIME, } = require('../../config');
-const { userLoginSchema, } = require('../validator/userLoginSchema');
+const { userLoginSchema,
+    userRegistrationSchema, } = require('../validator');
 
 /**
  * Middleware to register user

@@ -3,19 +3,19 @@ const { readUsersData,
     writePostsData,
     writeUsersData,
     readCommentsData,
-    writeCommentsData, } = require('../helper/fileManipulators');
+    writeCommentsData, } = require('../helper');
 const { InvalidToken,
     PostSuccessfullyAdded,
     NonExistentPost,
     LikeRegisterred,
     CommentAdded, } = require('../util/messages');
 const { sendResponse, } = require('../util/sendResponse');
-const { createPostSchema, } = require('../validator/createPostSchema');
 const jwt = require(`jsonwebtoken`);
 const { SECRETKEY, } = require('../../config');
 const Joi = require(`joi`);
 const uuid = require(`uuid`);
-const { addCommentSchema, } = require('../validator/addCommentSchema');
+const { addCommentSchema,
+    createPostSchema, } = require('../validator');
 
 /**
  * Middleware to create a post
@@ -58,7 +58,8 @@ function createPost(req, res) {
     userData.posts[postId] = Date.now();
     postFileData[postId] = body;
 
-    body.likes = {};
+    body.likes = [];
+    body.likeCount = 0;
     body.comments = {};
     body.userId = userId;
 
@@ -66,7 +67,7 @@ function createPost(req, res) {
     writeUsersData(userFileData);
 
     sendResponse(res, {
-        statusCode: 400,
+        statusCode: 200,
         message: PostSuccessfullyAdded,
         postId,
     });
@@ -94,7 +95,7 @@ function likePost(req, res) {
 
     const postFileData = readPostsData();
 
-    const { id: postId, type, } = req.params;
+    const { id: postId, } = req.params;
 
     // check that post exists
     if (! postFileData[postId]) {
@@ -106,7 +107,15 @@ function likePost(req, res) {
     }
 
     const postData = postFileData[postId];
-    postData.likes[userId] = type;
+    const userIndex = postData.likes.indexOf(userId);
+
+    if (userIndex === -1) {
+        postData.likeCount++;
+        postData.likes.push(userId);
+    } else {
+        postData.likeCount--;
+        postData.likes.splice(userIndex, 1);
+    }
 
     writePostsData(postFileData);
 
@@ -182,8 +191,75 @@ function commentPost(req, res) {
     });
 }
 
+/**
+ * Middleware to fetch all posts
+ * @param {Request} req express request object.
+ * @param {Response} res express response object.
+ * @param {Function} next express next function
+ */
+function getPost(req, res, next) {
+    if (req.originalUrl.indexOf(`/?id=`) === -1) {
+        next();
+        return;
+    }
+
+    const idToDisplay = req.
+        originalUrl.
+        slice(req.originalUrl.indexOf(`/?id=`) + 5);
+
+
+    const postFileData = readPostsData();
+    const commentFileData = readCommentsData();
+
+    const dataToDisplay = postFileData[idToDisplay];
+    dataToDisplay.commentsData = [];
+
+    for (const commentObj of Object.values(dataToDisplay.comments)) {
+        for (const commentKey of Object.keys(commentObj)) {
+            dataToDisplay.commentsData.push(commentFileData[commentKey]);
+        }
+    }
+
+    sendResponse(res, {
+        statusCode: 200,
+        data: dataToDisplay,
+    });
+}
+
+/**
+ * Middleware to fetch all posts
+ * @param {Request} req express request object.
+ * @param {Response} res express response object.
+ */
+function getAllPost(req, res) {
+    const dataToDisplay = [];
+
+    const postFileData = readPostsData();
+    const commentFileData = readCommentsData();
+
+    for (const post of Object.values(postFileData)) {
+        const postData = post;
+        postData.commentsData = [];
+
+        for (const commentObj of Object.values(postData.comments)) {
+            for (const commentKey of Object.keys(commentObj)) {
+                postData.commentsData.push(commentFileData[commentKey]);
+            }
+        }
+
+        dataToDisplay.push(postData);
+    }
+
+    sendResponse(res, {
+        statusCode: 200,
+        data: dataToDisplay,
+    });
+}
+
 module.exports = {
     createPost,
     likePost,
     commentPost,
+    getPost,
+    getAllPost,
 };

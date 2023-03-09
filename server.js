@@ -2,7 +2,7 @@ require(`dotenv`).config();
 const express = require(`express`);
 const userRouter = require(`./app/routes/user`);
 const postRouter = require(`./app/routes/post`);
-const { tokenCleanup, } = require('./app/helper/tokenCleanup');
+const { tokenCleanup, } = require('./app/helper');
 const { CLEANUPINTERVAL, } = require('./config');
 const { sendResponse, } = require('./app/util/sendResponse');
 const { NonExistentEndpoint, } = require('./app/util/messages');
