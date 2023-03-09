@@ -25,6 +25,7 @@ const { addCommentSchema, } = require('../validator/addCommentSchema');
 function createPost(req, res) {
     let userId;
 
+    // verify again in case token expired between calls
     try {
         ({ id: userId, } = jwt.verify(req.headers.token, SECRETKEY));
     } catch (err) {
@@ -36,6 +37,7 @@ function createPost(req, res) {
         return;
     }
 
+    // validate schema
     try {
         body = Joi.attempt(req.body, createPostSchema);
     } catch (err) {
@@ -51,6 +53,7 @@ function createPost(req, res) {
 
     const userData = userFileData[userId];
 
+    // generate data
     const postId = uuid.v4();
     userData.posts[postId] = Date.now();
     postFileData[postId] = body;
@@ -77,6 +80,7 @@ function createPost(req, res) {
 function likePost(req, res) {
     let userId;
 
+    // verify again in case token expired between calls
     try {
         ({ id: userId, } = jwt.verify(req.headers.token, SECRETKEY));
     } catch (err) {
@@ -92,6 +96,7 @@ function likePost(req, res) {
 
     const { id: postId, type, } = req.params;
 
+    // check that post exists
     if (! postFileData[postId]) {
         sendResponse(res, {
             statusCode: 403,
@@ -119,6 +124,7 @@ function likePost(req, res) {
 function commentPost(req, res) {
     let userId;
 
+    // verify again in case token expired between calls
     try {
         ({ id: userId, } = jwt.verify(req.headers.token, SECRETKEY));
     } catch (err) {
@@ -130,6 +136,7 @@ function commentPost(req, res) {
         return;
     }
 
+    // validate schema
     try {
         body = Joi.attempt(req.body, addCommentSchema);
     } catch (err) {
@@ -150,6 +157,7 @@ function commentPost(req, res) {
     const commentId = uuid.v4();
     const addedAt = Date.now();
 
+    // add comment per user
     if (postData.comments[userId]) {
         postData.comments[userId][commentId] = addedAt;
     } else {
@@ -160,6 +168,7 @@ function commentPost(req, res) {
 
     commentFileData[commentId] = body;
 
+    // generate data
     body.userId = userId;
     body.time = addedAt;
     body.postId = postId;
