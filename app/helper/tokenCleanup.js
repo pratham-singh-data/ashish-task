@@ -1,4 +1,4 @@
-const { TOKENEXPIRATIONTIME } = require('../../config');
+const { TOKENEXPIRATIONTIME, } = require('../../config');
 const { readTokensData, writeTokensData, } = require('./fileManipulators');
 
 /**

@@ -7,7 +7,7 @@ module.exports = {
     NonExistentUser: `This user does not exist.`,
     NonExistentPost: `This post does not exist.`,
     SuccessfulLogout: `Successfully logged out`,
-    TokenIsNedded: `Token is needed in headers.`,
+    TokenIsNeeded: `Token is needed in headers.`,
     PostSuccessfullyAdded: `Post successfully Added`,
     LikeRegisterred: `Like Registerred.`,
     CommentAdded: `Comment successfully added.`,

@@ -3,7 +3,7 @@ const { sendResponse, } = require('../util/sendResponse');
 const jwt = require(`jsonwebtoken`);
 const { InvalidToken,
     NonExistentUser,
-    TokenIsNedded, } = require('../util/messages');
+    TokenIsNeeded, } = require('../util/messages');
 const { readTokensData,
     readUsersData, } = require('../helper/fileManipulators');
 
@@ -17,7 +17,7 @@ function checkToken(req, res, next) {
     if (! req.headers.token) {
         sendResponse(res, {
             statusCode: 400,
-            message: TokenIsNedded,
+            message: TokenIsNeeded,
         });
         return;
     }
