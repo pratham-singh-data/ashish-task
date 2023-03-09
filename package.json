@@ -1,0 +1,21 @@
+{
+  "name": "ashish-eval-task",
+  "version": "1.0.0",
+  "description": "Test task by chicmic",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "pratham-singh",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "joi": "^17.8.3",
+    "jsonwebtoken": "^9.0.0"
+  }
+}
