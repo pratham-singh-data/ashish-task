@@ -10,7 +10,7 @@ const router = Router({
 });
 
 router.post(`/`, checkToken, createPost);
-router.post(`/like/:id/:type`, checkToken, likePost);
+router.patch(`/like/:id/:type`, checkToken, likePost);
 router.post(`/comment/:id`, checkToken, commentPost);
 
 module.exports = router;

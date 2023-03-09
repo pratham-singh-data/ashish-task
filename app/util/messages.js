@@ -10,4 +10,5 @@ module.exports = {
     TokenIsNedded: `Token is needed in headers.`,
     PostSuccessfullyAdded: `Post successfully Added`,
     LikeRegisterred: `Like Registerred.`,
+    CommentAdded: `Comment successfully added.`,
 };
